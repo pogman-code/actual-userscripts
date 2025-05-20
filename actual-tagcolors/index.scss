@@ -1,0 +1,25 @@
+:root
+  --color-note-default: #9C27B0
+  --color-note-blue: #2196F3
+  --color-note-grey: #9E9E9E
+  --color-note-green: #4CAF50
+  --color-note-red: #F44336
+  --color-note-orange: #FF9800
+  --color-note-teal: #17a2b8
+  --color-note-dark: #343a40
+  
+@mixin note-color($name, $color)
+  .note-#{$name}
+    color: $color !important
+    background-color: rgb(from $color r g b / 0.15)
+    &:hover
+      background-color: rgb(from $color r g b / 0.25)
+      
+@include note-color("default", var(--color-note-default))
+@include note-color("blue", var(--color-note-blue))
+@include note-color("grey", var(--color-note-grey))
+@include note-color("green", var(--color-note-green))
+@include note-color("red", var(--color-note-red))
+@include note-color("orange", var(--color-note-orange))
+@include note-color("teal", var(--color-note-teal))
+@include note-color("dark", var(--color-note-dark))
