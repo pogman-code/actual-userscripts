@@ -19,3 +19,8 @@ Colors must be defined in the `NOTES_COLORS` variables.
 Some colors are already defined in the CSS file, more can be added.
 
 ![](.img/actual-tagcolors-1.png)
+
+## actual-balancecolors
+Show negative account balances in red in the sidebar.
+
+![](.img/actual-balancecolors.png)
