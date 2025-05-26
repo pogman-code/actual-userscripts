@@ -1,0 +1,9 @@
+// Category rows
+*div[data-testid='budget-totals'] + div div[data-testid='row']:has(div[data-testid='category-name'])
+  height: 28px
+  flex: 0 0 28px
+
+// Group rows
+*div[data-testid='budget-totals'] + div div[data-testid='row']:not(:has(div[data-testid='category-name']))
+  height: 30px
+  flex: 0 0 30px
