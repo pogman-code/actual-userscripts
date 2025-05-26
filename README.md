@@ -24,3 +24,9 @@ Some colors are already defined in the CSS file, more can be added.
 Show negative account balances in red in the sidebar.
 
 ![](.img/actual-balancecolors.png)
+
+## actual-slimmer-budgetrows
+Make the budget rows a bit slimmer.
+Allows you to see more categories at a glance without having to scroll.
+
+![](.img/actual-slimmer-budgetrows_before.png) ![](.img/actual-slimmer-budgetrows_after.png)
