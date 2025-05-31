@@ -1,9 +1,7 @@
 const getDailyBalance = (balanceText) => {
   const balance = parseFloat(balanceText.replace(",", ".").replace(" ", ""));
-  const lastDay = new Date();
-  lastDay.setMonth(lastDay.getMonth() + 1);
-  lastDay.setDate(0);
   const today = new Date();
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
   const remainingDays = lastDay.getDate() - today.getDate();
 
