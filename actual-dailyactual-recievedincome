@@ -1,1 +1,111 @@
 
+(function () {
+  const GOAL_AMOUNT = 5000;
+  let currentUrl = location.href;
+
+  function getCurrentMonthYearPrefix() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    return `budget${year}${month}`;
+  }
+
+  function showBoxWithAmount(diff) {
+    removeBox(); // ensure only one box exists
+
+    const box = document.createElement("div");
+    box.id = "income-diff-box";
+    box.style.position = "fixed";
+    box.style.top = "215px";
+    box.style.left = "460px";
+    box.style.zIndex = "1000";
+    box.style.marginLeft = "0";
+    box.style.padding = "24.5px 98px";
+    box.style.borderRadius = "8px";
+    box.style.fontSize = "18px";
+    box.style.background = "#243B53";
+    box.style.color = "#B990FF";
+    box.style.display = "inline-block";
+    box.style.whiteSpace = "nowrap";
+    box.style.textAlign = "center";
+
+    const label = document.createElement("div");
+    label.textContent = "To Receive:";
+    label.style.marginBottom = "5px";
+    label.style.color = "#D9E2EC";
+
+    const sign = diff < 0 ? '-' : '+';
+    const amount = Math.abs(diff).toFixed(2);
+    const message = document.createElement("div");
+    message.textContent = `${sign}$${amount}`;
+
+    box.appendChild(label);
+    box.appendChild(message);
+    document.body.appendChild(box);
+  }
+
+  function removeBox() {
+    const existingBox = document.querySelector("#income-diff-box");
+    if (existingBox) existingBox.remove();
+  }
+
+  function addGoalBox() {
+    const prefix = getCurrentMonthYearPrefix();
+    const matches = document.querySelectorAll(`span[data-testid^='${prefix}!sum-amount']`);
+    console.log(`[addGoalBox] Found ${matches.length} matches for prefix: ${prefix}`);
+
+    if (!matches.length) {
+      console.warn(`[addGoalBox] No income span found for ${prefix}, showing full goal`);
+      showBoxWithAmount(-GOAL_AMOUNT);
+      return;
+    }
+
+    let maxIncome = -Infinity;
+    let target = null;
+
+    for (const el of matches) {
+      const val = parseFloat(el.innerText.replace(/,/g, ''));
+      if (!isNaN(val) && val >= 0 && val > maxIncome) {
+        maxIncome = val;
+        target = el;
+      }
+    }
+
+    if (target === null) {
+      console.warn(`[addGoalBox] No valid income element found, showing full goal`);
+      showBoxWithAmount(-GOAL_AMOUNT);
+      return;
+    }
+
+    const diff = maxIncome - GOAL_AMOUNT;
+    console.log(`[addGoalBox] Income: ${maxIncome}, Goal: ${GOAL_AMOUNT}, Diff: ${diff}`);
+    showBoxWithAmount(diff);
+  }
+
+  function initWhenReady() {
+    const prefix = getCurrentMonthYearPrefix();
+
+    const checkInterval = setInterval(() => {
+      const matches = document.querySelectorAll(`span[data-testid^='${prefix}!sum-amount']`);
+      if (matches.length) {
+        clearInterval(checkInterval);
+        addGoalBox();
+      }
+    }, 500);
+  }
+
+  // Monitor SPA navigation by watching URL changes
+  const observer = new MutationObserver(() => {
+    if (location.href !== currentUrl) {
+      currentUrl = location.href;
+      console.log(`[SPA Observer] URL changed to ${currentUrl}`);
+      removeBox();        // Remove box on navigation
+      initWhenReady();    // Try adding the new one
+    }
+  });
+
+  observer.observe(document, { childList: true, subtree: true });
+
+  // Initial load
+  initWhenReady();
+})();
