@@ -1,7 +1,7 @@
 const getDailyBalance = (balanceText) => {
-  const balance = parseFloat(balanceText.replace(",", ".").replace(" ", ""));
+  const balance = parseFloat(balanceText.replace(',', '.').replace(' ', ''));
   const today = new Date();
-  const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  const lastDay = new Date(today.getFullYear(), today.getMonth()+1, 0);
 
   const remainingDays = lastDay.getDate() - today.getDate();
 
@@ -21,23 +21,17 @@ const getDailyBalance = (balanceText) => {
 };
 
 const displayDailyBalance = () => {
-  const balanceBtn = document.querySelector("*[data-testid=account-balance]");
+  const balanceBtn = document.querySelector('*[data-testid=account-balance]');
+  let dailyNode = document.querySelector('#daily');
 
   if (balanceBtn) {
-    const detailsNode = balanceBtn.nextSibling;
-
-    if (detailsNode && detailsNode.tagName === "DIV") {
-      let dailyNode;
-      if (detailsNode.childElementCount === 3) {
-        dailyNode = detailsNode.lastChild;
-      } else {
-        dailyNode = detailsNode.firstChild.cloneNode(true);
-        detailsNode.appendChild(dailyNode);
-      }
-
-      dailyNode.childNodes[0].textContent = "Daily:";
-      dailyNode.lastChild.textContent = getDailyBalance(balanceBtn.textContent);
+    if (!dailyNode) {
+      dailyNode = balanceBtn.nextSibling.cloneNode(true);
+      dailyNode.id = 'daily';
+      balanceBtn.after(dailyNode);
     }
+    dailyNode.childNodes[0].textContent = 'Daily:';
+    dailyNode.lastChild.textContent = getDailyBalance(balanceBtn.textContent);
   }
 };
 
