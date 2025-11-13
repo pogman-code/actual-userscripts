@@ -1,5 +1,5 @@
 const getDailyBalance = (balanceText) => {
-  const balance = parseFloat(balanceText.replace(',', '.').replace(' ', ''));
+  const balance = parseFloat(balanceText.replace(',', '.').replace(/\s+/, ''));
   const today = new Date();
   const lastDay = new Date(today.getFullYear(), today.getMonth()+1, 0);
 
